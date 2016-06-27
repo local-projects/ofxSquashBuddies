@@ -38,6 +38,11 @@ namespace ofxSquashBuddies {
 	}
 
 	//----------
+	Message::Message(const ofxKinectData & data) {
+		//this->setData(data);
+	}
+	
+	//----------
 	void Message::setData(const string & data) {
 		this->setData(data.data(), data.size());
 	}

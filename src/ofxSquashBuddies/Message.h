@@ -2,7 +2,8 @@
 
 #include "ofConstants.h"
 #include "ofPixels.h"
-#include "ofMesh.h"
+#include "ofMesh.h" 
+#include "KinectData.h"
 
 #include <string>
 using namespace std;
@@ -42,7 +43,8 @@ namespace ofxSquashBuddies {
 		//--
 		//
 		First_User_Slot = 32,
-		Example_User_Slot = First_User_Slot + 1
+		Example_User_Slot = First_User_Slot + 1,
+		KinectData = First_User_Slot + 2
 		//
 		//--
 	};
@@ -198,6 +200,33 @@ namespace ofxSquashBuddies {
 		};
 	}
 
+	struct KinectData {
+		struct {
+			uint16_t headerSize = 36; //change to match data
+			MessageType messageType = MessageType::KinectData;
+
+			//one mesh
+			uint32_t verticesSize;
+			uint32_t colorsSize;
+			uint32_t normalsSize;
+			uint32_t texCoordsSize;
+			uint32_t indicesSize;
+
+			uint16_t primitiveMode;
+
+			uint8_t useColors;
+			uint8_t useNormals;
+			uint8_t useTextures;
+			uint8_t useIndices;
+
+			uint8_t reserved[2];
+
+			//skeletons
+			uint32_t joints = 6 * 25 * sizeof(ofVec3f);
+		};
+	};
+
+
 	class Message {
 	public:
 		Message();
@@ -207,6 +236,7 @@ namespace ofxSquashBuddies {
 		Message(const ofShortPixels &);
 		Message(const ofFloatPixels &);
 		Message(const ofMesh &);
+		Message(const ofxKinectData &);
 		
 		void setData(const string &);
 		void setData(const void * data, size_t size);
