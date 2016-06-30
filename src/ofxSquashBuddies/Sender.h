@@ -24,6 +24,7 @@ namespace ofxSquashBuddies {
 		bool send(const string &);
 		bool send(const ofPixels &);
 		bool send(const ofMesh &);
+		bool send(const ofxKinectData &);
 		bool send(const Message &);
 		bool send(Message &&);
 

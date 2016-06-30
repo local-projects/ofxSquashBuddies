@@ -39,7 +39,7 @@ namespace ofxSquashBuddies {
 
 	//----------
 	Message::Message(const ofxKinectData & data) {
-		//this->setData(data);
+		this->setData(data);
 	}
 	
 	//----------
@@ -154,6 +154,138 @@ namespace ofxSquashBuddies {
 			memcpy(body, data.getIndexPointer(), indicesDataSize);
 		}
 	}
+
+	//----------
+	void Message::setData(const ofxKinectData & data) {
+		const auto headerSize = sizeof(Header::KinectData);
+
+		const auto verticesDataSize0 = data.vertices0.size() * sizeof(ofVec3f);
+		const auto colorsDataSize0 = data.colors0.size() * sizeof(ofFloatColor);
+		const auto jointsDataSize0 = data.joints0.size() * sizeof(ofVec3f);
+
+		const auto verticesDataSize1 = data.vertices1.size() * sizeof(ofVec3f);
+		const auto colorsDataSize1 = data.colors1.size() * sizeof(ofFloatColor);
+		const auto jointsDataSize1 = data.joints1.size() * sizeof(ofVec3f);
+
+		const auto verticesDataSize2 = data.vertices2.size() * sizeof(ofVec3f);
+		const auto colorsDataSize2 = data.colors2.size() * sizeof(ofFloatColor);
+		const auto jointsDataSize2 = data.joints2.size() * sizeof(ofVec3f);
+
+		const auto verticesDataSize3 = data.vertices3.size() * sizeof(ofVec3f);
+		const auto colorsDataSize3 = data.colors3.size() * sizeof(ofFloatColor);
+		const auto jointsDataSize3 = data.joints3.size() * sizeof(ofVec3f);
+
+		const auto verticesDataSize4 = data.vertices4.size() * sizeof(ofVec3f);
+		const auto colorsDataSize4 = data.colors4.size() * sizeof(ofFloatColor);
+		const auto jointsDataSize4 = data.joints4.size() * sizeof(ofVec3f);
+
+		const auto verticesDataSize5 = data.vertices5.size() * sizeof(ofVec3f);
+		const auto colorsDataSize5 = data.colors5.size() * sizeof(ofFloatColor);
+		const auto jointsDataSize5 = data.joints5.size() * sizeof(ofVec3f);
+
+		const size_t bodySize = verticesDataSize0 + colorsDataSize0 + jointsDataSize0 +
+			verticesDataSize1 + colorsDataSize1 + jointsDataSize1 +
+			verticesDataSize2 + colorsDataSize2 + jointsDataSize2 +
+			verticesDataSize3 + colorsDataSize3 + jointsDataSize3 +
+			verticesDataSize4 + colorsDataSize4 + jointsDataSize4 +
+			verticesDataSize5 + colorsDataSize5 + jointsDataSize5;
+
+		this->headerAndBody.resize(headerSize + bodySize);
+
+		// header
+		{
+			auto & header = this->getHeader<Header::KinectData>(true);
+			header.verticesSize0 = (uint32_t)data.vertices0.size();
+			header.colorsSize0 = (uint32_t)data.colors0.size();
+			header.jointsSize0 = (uint32_t)data.joints0.size();
+
+			header.verticesSize1 = (uint32_t)data.vertices1.size();
+			header.colorsSize1 = (int32_t)data.colors1.size();
+			header.jointsSize1 = (uint32_t)data.joints1.size();
+
+			header.verticesSize2 = (uint32_t)data.vertices2.size();
+			header.colorsSize2 = (uint32_t)data.colors2.size();
+			header.jointsSize2 = (uint32_t)data.joints2.size();
+
+			header.verticesSize3 = (uint32_t)data.vertices3.size();
+			header.colorsSize3 = (uint32_t)data.colors3.size();
+			header.jointsSize3 = (uint32_t)data.joints3.size();
+
+			header.verticesSize4 = (uint32_t)data.vertices4.size();
+			header.colorsSize4 = (uint32_t)data.colors4.size();
+			header.jointsSize4 = (uint32_t)data.joints4.size();
+
+			header.verticesSize5 = (uint32_t)data.vertices5.size();
+			header.colorsSize5 = (uint32_t)data.colors5.size();
+			header.jointsSize5 = (uint32_t)data.joints5.size();
+
+
+		}
+
+		// body
+		{
+			auto body = (uint8_t *) this->getBodyData(); 
+
+			memcpy(body, data.vertices0.data(), verticesDataSize0);
+			body += verticesDataSize0;
+
+			memcpy(body, data.colors0.data(), colorsDataSize0);
+			body += colorsDataSize0;
+
+			memcpy(body, data.joints0.data(), jointsDataSize0);
+			body += jointsDataSize0;
+
+			memcpy(body, data.vertices1.data(), verticesDataSize1);
+			body += verticesDataSize1;
+
+			memcpy(body, data.colors1.data(), colorsDataSize1);
+			body += colorsDataSize1;
+
+			memcpy(body, data.joints1.data(), jointsDataSize1);
+			body += jointsDataSize1;
+
+
+			memcpy(body, data.vertices2.data(), verticesDataSize2);
+			body += verticesDataSize2;
+
+			memcpy(body, data.colors2.data(), colorsDataSize2);
+			body += colorsDataSize2;
+			
+
+			memcpy(body, data.joints2.data(), jointsDataSize2);
+			body += jointsDataSize2;
+
+
+			memcpy(body, data.vertices3.data(), verticesDataSize3);
+			body += verticesDataSize3;
+
+			memcpy(body, data.colors3.data(), colorsDataSize3);
+			body += colorsDataSize3;
+
+			memcpy(body, data.joints3.data(), jointsDataSize3);
+			body += jointsDataSize3;
+
+
+			memcpy(body, data.vertices4.data(), verticesDataSize4);
+			body += verticesDataSize4;
+
+			memcpy(body, data.colors4.data(), colorsDataSize4);
+			body += colorsDataSize4;
+
+			memcpy(body, data.joints4.data(), jointsDataSize4);
+			body += jointsDataSize4;
+
+
+			memcpy(body, data.vertices5.data(), verticesDataSize5);
+			body += verticesDataSize5;
+
+			memcpy(body, data.colors5.data(), colorsDataSize5);
+			body += colorsDataSize5;
+
+			memcpy(body, data.joints5.data(), jointsDataSize5);
+		}
+	}
+
 
 	//----------
 	void Message::clear() {
@@ -329,6 +461,11 @@ namespace ofxSquashBuddies {
 			return false;
 		}
 
+	}
+
+	bool Message::getData(ofxKinectData &) const
+	{
+		return false;
 	}
 
 	//----------

@@ -89,6 +89,11 @@ namespace ofxSquashBuddies {
 	}
 
 	//----------
+	bool Sender::send(const ofxKinectData & data) {
+		return this->send(move(Message(data)));
+	}
+
+	//----------
 	bool Sender::send(const Message & message) {
 		auto messageCopy = message;
 		return this->send(move(messageCopy));

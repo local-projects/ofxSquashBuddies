@@ -198,33 +198,40 @@ namespace ofxSquashBuddies {
 				}
 			}
 		};
+
+		struct KinectData {
+			struct {
+				uint16_t headerSize = 76; //i calc 64 but the code returns 76.
+				MessageType messageType = MessageType::KinectData;
+
+				uint32_t verticesSize0;
+				uint32_t colorsSize0;
+				uint16_t jointsSize0;
+
+				uint32_t verticesSize1;
+				uint32_t colorsSize1;
+				uint16_t jointsSize1;
+
+				uint32_t verticesSize2;
+				uint32_t colorsSize2;
+				uint16_t jointsSize2;
+
+				uint32_t verticesSize3;
+				uint32_t colorsSize3;
+				uint16_t jointsSize3;
+
+				uint32_t verticesSize4;
+				uint32_t colorsSize4;
+				uint16_t jointsSize4;
+
+				uint32_t verticesSize5;
+				uint32_t colorsSize5;
+				uint16_t jointsSize5;
+			};
+		};
 	}
 
-	struct KinectData {
-		struct {
-			uint16_t headerSize = 36; //change to match data
-			MessageType messageType = MessageType::KinectData;
-
-			//one mesh
-			uint32_t verticesSize;
-			uint32_t colorsSize;
-			uint32_t normalsSize;
-			uint32_t texCoordsSize;
-			uint32_t indicesSize;
-
-			uint16_t primitiveMode;
-
-			uint8_t useColors;
-			uint8_t useNormals;
-			uint8_t useTextures;
-			uint8_t useIndices;
-
-			uint8_t reserved[2];
-
-			//skeletons
-			uint32_t joints = 6 * 25 * sizeof(ofVec3f);
-		};
-	};
+	
 
 
 	class Message {
@@ -244,6 +251,7 @@ namespace ofxSquashBuddies {
 		void setData(const ofShortPixels &);
 		void setData(const ofFloatPixels &);
 		void setData(const ofMesh &);
+		void setData(const ofxKinectData &);
 
 		void clear();
 
@@ -253,6 +261,7 @@ namespace ofxSquashBuddies {
 		bool getData(ofShortPixels &);
 		bool getData(ofFloatPixels &);
 		bool getData(ofMesh &) const;
+		bool getData(ofxKinectData &) const;
 
 		void pushData(const void * data, size_t size);
 
