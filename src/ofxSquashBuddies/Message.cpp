@@ -109,7 +109,7 @@ namespace ofxSquashBuddies {
 		const auto headerSize = sizeof(Header::Mesh);
 		
 		const auto verticesDataSize = data.getNumVertices() * sizeof(ofVec3f);
-		const auto colorsDataSize = data.getNumColors() * sizeof(ofFloatColor);
+		const auto colorsDataSize = data.getNumColors() * sizeof(ofColor);
 		const auto normalsDataSize = data.getNumNormals() * sizeof(ofVec3f);
 		const auto texCoordsDataSize = data.getNumTexCoords() * sizeof(ofVec2f);
 		const auto indicesDataSize = data.getNumIndices() * sizeof(ofIndexType);
@@ -160,27 +160,27 @@ namespace ofxSquashBuddies {
 		const auto headerSize = sizeof(Header::KinectData);
 
 		const auto verticesDataSize0 = data.vertices0.size() * sizeof(ofVec3f);
-		const auto colorsDataSize0 = data.colors0.size() * sizeof(ofFloatColor);
+		const auto colorsDataSize0 = data.colors0.size() * sizeof(ofColor);
 		const auto jointsDataSize0 = data.joints0.size() * sizeof(ofVec3f);
 
 		const auto verticesDataSize1 = data.vertices1.size() * sizeof(ofVec3f);
-		const auto colorsDataSize1 = data.colors1.size() * sizeof(ofFloatColor);
+		const auto colorsDataSize1 = data.colors1.size() * sizeof(ofColor);
 		const auto jointsDataSize1 = data.joints1.size() * sizeof(ofVec3f);
 
 		const auto verticesDataSize2 = data.vertices2.size() * sizeof(ofVec3f);
-		const auto colorsDataSize2 = data.colors2.size() * sizeof(ofFloatColor);
+		const auto colorsDataSize2 = data.colors2.size() * sizeof(ofColor);
 		const auto jointsDataSize2 = data.joints2.size() * sizeof(ofVec3f);
 
 		const auto verticesDataSize3 = data.vertices3.size() * sizeof(ofVec3f);
-		const auto colorsDataSize3 = data.colors3.size() * sizeof(ofFloatColor);
+		const auto colorsDataSize3 = data.colors3.size() * sizeof(ofColor);
 		const auto jointsDataSize3 = data.joints3.size() * sizeof(ofVec3f);
 
 		const auto verticesDataSize4 = data.vertices4.size() * sizeof(ofVec3f);
-		const auto colorsDataSize4 = data.colors4.size() * sizeof(ofFloatColor);
+		const auto colorsDataSize4 = data.colors4.size() * sizeof(ofColor);
 		const auto jointsDataSize4 = data.joints4.size() * sizeof(ofVec3f);
 
 		const auto verticesDataSize5 = data.vertices5.size() * sizeof(ofVec3f);
-		const auto colorsDataSize5 = data.colors5.size() * sizeof(ofFloatColor);
+		const auto colorsDataSize5 = data.colors5.size() * sizeof(ofColor);
 		const auto jointsDataSize5 = data.joints5.size() * sizeof(ofVec3f);
 
 		const size_t bodySize = verticesDataSize0 + colorsDataSize0 + jointsDataSize0 +
@@ -421,7 +421,7 @@ namespace ofxSquashBuddies {
 
 			//data sizes
 			const auto verticesDataSize = header.verticesSize * sizeof(ofVec3f);
-			const auto colorsDataSize = header.colorsSize * sizeof(ofFloatColor);
+			const auto colorsDataSize = header.colorsSize * sizeof(ofColor);
 			const auto normalsDataSize = header.normalsSize * sizeof(ofVec3f);
 			const auto texCoordsDataSize = header.texCoordsSize * sizeof(ofVec2f);
 			const auto indicesDataSize = header.indicesSize * sizeof(ofIndexType);
@@ -521,27 +521,27 @@ namespace ofxSquashBuddies {
 
 			//data sizes
 			const auto verticesDataSize0 = header.verticesSize0 * sizeof(ofVec3f);
-			const auto colorsDataSize0 = header.colorsSize0 * sizeof(ofFloatColor);
+			const auto colorsDataSize0 = header.colorsSize0 * sizeof(ofColor);
 			const auto jointsDataSize0 = header.jointsSize0 * sizeof(ofVec3f);
 
 			const auto verticesDataSize1 = header.verticesSize1 * sizeof(ofVec3f);
-			const auto colorsDataSize1 = header.colorsSize1 * sizeof(ofFloatColor);
+			const auto colorsDataSize1 = header.colorsSize1 * sizeof(ofColor);
 			const auto jointsDataSize1 = header.jointsSize1 * sizeof(ofVec3f);
 
 			const auto verticesDataSize2 = header.verticesSize2 * sizeof(ofVec3f);
-			const auto colorsDataSize2 = header.colorsSize2 * sizeof(ofFloatColor);
+			const auto colorsDataSize2 = header.colorsSize2 * sizeof(ofColor);
 			const auto jointsDataSize2 = header.jointsSize2 * sizeof(ofVec3f);
 
 			const auto verticesDataSize3 = header.verticesSize3 * sizeof(ofVec3f);
-			const auto colorsDataSize3 = header.colorsSize3 * sizeof(ofFloatColor);
+			const auto colorsDataSize3 = header.colorsSize3 * sizeof(ofColor);
 			const auto jointsDataSize3 = header.jointsSize3 * sizeof(ofVec3f);
 
 			const auto verticesDataSize4 = header.verticesSize4 * sizeof(ofVec3f);
-			const auto colorsDataSize4 = header.colorsSize4 * sizeof(ofFloatColor);
+			const auto colorsDataSize4 = header.colorsSize4 * sizeof(ofColor);
 			const auto jointsDataSize4 = header.jointsSize4 * sizeof(ofVec3f);
 
 			const auto verticesDataSize5 = header.verticesSize5 * sizeof(ofVec3f);
-			const auto colorsDataSize5 = header.colorsSize5 * sizeof(ofFloatColor);
+			const auto colorsDataSize5 = header.colorsSize5 * sizeof(ofColor);
 			const auto jointsDataSize5 = header.jointsSize5 * sizeof(ofVec3f);
 
 			//copy in data

@@ -4,27 +4,27 @@
 class ofxKinectData {
 public:
 	vector<ofVec3f> vertices0;
-	vector<ofFloatColor> colors0;
+	vector<ofColor> colors0;
 	vector<ofVec3f> joints0;
 
 	vector<ofVec3f> vertices1;
-	vector<ofFloatColor> colors1;
+	vector<ofColor> colors1;
 	vector<ofVec3f> joints1;
 
 	vector<ofVec3f> vertices2;
-	vector<ofFloatColor> colors2;
+	vector<ofColor> colors2;
 	vector<ofVec3f> joints2;
 
 	vector<ofVec3f> vertices3;
-	vector<ofFloatColor> colors3;
+	vector<ofColor> colors3;
 	vector<ofVec3f> joints3;
 
 	vector<ofVec3f> vertices4;
-	vector<ofFloatColor> colors4;
+	vector<ofColor> colors4;
 	vector<ofVec3f> joints4;
 
 	vector<ofVec3f> vertices5;
-	vector<ofFloatColor> colors5;
+	vector<ofColor> colors5;
 	vector<ofVec3f> joints5;
 
 	void addVert(int id, ofVec3f vert) {
@@ -54,7 +54,7 @@ public:
 		}
 	}
 
-	void addColor(int id, ofFloatColor col) {
+	void addColor(int id, ofColor col) {
 		switch (id)
 		{
 		case 0:
