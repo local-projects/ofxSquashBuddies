@@ -33,6 +33,7 @@ namespace ofxSquashBuddies {
 		bool receive(string &);
 		bool receive(ofPixels &);
 		bool receive(ofMesh &);
+		bool receive(ofxKinectData &);
 
 		vector<DroppedFrame> getDroppedFrames() const;
 		float getIncomingFramerate() const;

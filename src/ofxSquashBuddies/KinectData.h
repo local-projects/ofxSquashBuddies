@@ -133,4 +133,7 @@ public:
 		colors5.clear();
 		joints5.clear();
 	}
+
+
+	ofVec3f* getVertices0() { return vertices0.data(); }
 };
