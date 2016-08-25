@@ -4,7 +4,7 @@
 class ofxKinectData {
 public:
 
-	struct KinectDataBody {
+	struct Body {
 		vector<ofVec3f> vertices;
 		vector<ofColor> colors;
 		vector<ofVec3f> joints;
