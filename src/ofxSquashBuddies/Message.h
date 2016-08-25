@@ -201,45 +201,15 @@ namespace ofxSquashBuddies {
 
 		struct KinectData {
 			struct {
-				uint16_t headerSize = 64; //i calc 64 but the code returns 76.
+				uint16_t headerSize = 64;
 				MessageType messageType = MessageType::KinectData;
 
-#define NEW_DATA_STRUCT
-#ifdef NEW_DATA_STRUCT
 				uint32_t verticesSize[6];
 				uint32_t colorsSize[6];
 				uint16_t jointsSize[6];
-#else
-				uint32_t verticesSize0;
-				uint32_t colorsSize0;
-				uint16_t jointsSize0;
-
-				uint32_t verticesSize1;
-				uint32_t colorsSize1;
-				uint16_t jointsSize1;
-
-				uint32_t verticesSize2;
-				uint32_t colorsSize2;
-				uint16_t jointsSize2;
-
-				uint32_t verticesSize3;
-				uint32_t colorsSize3;
-				uint16_t jointsSize3;
-
-				uint32_t verticesSize4;
-				uint32_t colorsSize4;
-				uint16_t jointsSize4;
-
-				uint32_t verticesSize5;
-				uint32_t colorsSize5;
-				uint16_t jointsSize5;
-#endif
 			};
 		};
 	}
-
-	
-
 
 	class Message {
 	public:
