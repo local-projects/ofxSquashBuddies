@@ -164,9 +164,9 @@ namespace ofxSquashBuddies {
 		size_t jointsDataSize[6];
 
 		for (int i=0; i<6; i++) {
-			verticesDataSize[i] = data.users[i].vertices.size() * sizeof(ofVec3f);
-			colorsDataSize[i] = data.users[i].colors.size() * sizeof(ofColor);
-			jointsDataSize[i] = data.users[i].joints.size() * sizeof(ofVec3f);
+			verticesDataSize[i] = data.bodies[i].vertices.size() * sizeof(ofVec3f);
+			colorsDataSize[i] = data.bodies[i].colors.size() * sizeof(ofColor);
+			jointsDataSize[i] = data.bodies[i].joints.size() * sizeof(ofVec3f);
 		}
 
 		size_t bodySize = 0;
@@ -179,9 +179,9 @@ namespace ofxSquashBuddies {
 		{
 			auto & header = this->getHeader<Header::KinectData>(true);
 			for (int i=0; i<6; i++) {
-				header.verticesSize[i] = (uint32_t)data.users[i].vertices.size();
-				header.colorsSize[i] = (uint32_t)data.users[i].colors.size();
-				header.jointsSize[i] = (uint32_t)data.users[i].joints.size();
+				header.verticesSize[i] = (uint32_t)data.bodies[i].vertices.size();
+				header.colorsSize[i] = (uint32_t)data.bodies[i].colors.size();
+				header.jointsSize[i] = (uint32_t)data.bodies[i].joints.size();
 			}
 		}
 
@@ -190,11 +190,11 @@ namespace ofxSquashBuddies {
 			auto body = (uint8_t *) this->getBodyData(); 
 
 			for (int i=0; i<6; i++) {
-				memcpy(body, data.users[i].vertices.data(), verticesDataSize[i]);
+				memcpy(body, data.bodies[i].vertices.data(), verticesDataSize[i]);
 				body += verticesDataSize[i];
-				memcpy(body, data.users[i].colors.data(), colorsDataSize[i]);
+				memcpy(body, data.bodies[i].colors.data(), colorsDataSize[i]);
 				body += colorsDataSize[i];
-				memcpy(body, data.users[i].joints.data(), jointsDataSize[i]);
+				memcpy(body, data.bodies[i].joints.data(), jointsDataSize[i]);
 				body += jointsDataSize[i];
 			}
 		}
@@ -387,15 +387,15 @@ namespace ofxSquashBuddies {
 			auto body = (uint8_t *) this->getBodyData();
 
 			for (int i=0; i<6; i++) {
-				data.users[i].vertices.resize(header.verticesSize[i]);
-				data.users[i].colors.resize(header.colorsSize[i]);
-				data.users[i].joints.resize(header.jointsSize[i]);
+				data.bodies[i].vertices.resize(header.verticesSize[i]);
+				data.bodies[i].colors.resize(header.colorsSize[i]);
+				data.bodies[i].joints.resize(header.jointsSize[i]);
 
-				memcpy(data.users[i].vertices.data(), body, header.verticesSize[i] * sizeof(ofVec3f));
+				memcpy(data.bodies[i].vertices.data(), body, header.verticesSize[i] * sizeof(ofVec3f));
 				body += header.verticesSize[i] * sizeof(ofVec3f);
-				memcpy(data.users[i].colors.data(), body, header.colorsSize[i] * sizeof(ofColor));
+				memcpy(data.bodies[i].colors.data(), body, header.colorsSize[i] * sizeof(ofColor));
 				body += header.colorsSize[i] * sizeof(ofColor);
-				memcpy(data.users[i].joints.data(), body, header.jointsSize[i] * sizeof(ofVec3f));
+				memcpy(data.bodies[i].joints.data(), body, header.jointsSize[i] * sizeof(ofVec3f));
 				body += header.jointsSize[i] * sizeof(ofVec3f);
 			}
 			return true;
