@@ -204,6 +204,12 @@ namespace ofxSquashBuddies {
 				uint16_t headerSize = 76; //i calc 64 but the code returns 76.
 				MessageType messageType = MessageType::KinectData;
 
+#define NEW_DATA_STRUCT
+#ifdef NEW_DATA_STRUCT
+				uint32_t verticesSize[6];
+				uint32_t colorsSize[6];
+				uint16_t jointsSize[6];
+#else
 				uint32_t verticesSize0;
 				uint32_t colorsSize0;
 				uint16_t jointsSize0;
@@ -227,6 +233,7 @@ namespace ofxSquashBuddies {
 				uint32_t verticesSize5;
 				uint32_t colorsSize5;
 				uint16_t jointsSize5;
+#endif
 			};
 		};
 	}

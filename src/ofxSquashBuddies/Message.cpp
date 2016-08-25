@@ -159,6 +159,18 @@ namespace ofxSquashBuddies {
 	void Message::setData(const ofxKinectData & data) {
 		const auto headerSize = sizeof(Header::KinectData);
 
+#define NEW_DATA_STRUCT
+#ifdef NEW_DATA_STRUCT
+		size_t verticesDataSize[6];
+		size_t colorsDataSize[6];
+		size_t jointsDataSize[6];
+
+		for (int i=0; i<6; i++) {
+			verticesDataSize[i] = data.users[i].vertices.size() * sizeof(ofVec3f);
+			colorsDataSize[i] = data.users[i].colors.size() * sizeof(ofColor);
+			jointsDataSize[i] = data.users[i].joints.size() * sizeof(ofVec3f);
+		}
+#else
 		const auto verticesDataSize0 = data.vertices0.size() * sizeof(ofVec3f);
 		const auto colorsDataSize0 = data.colors0.size() * sizeof(ofColor);
 		const auto jointsDataSize0 = data.joints0.size() * sizeof(ofVec3f);
@@ -182,19 +194,33 @@ namespace ofxSquashBuddies {
 		const auto verticesDataSize5 = data.vertices5.size() * sizeof(ofVec3f);
 		const auto colorsDataSize5 = data.colors5.size() * sizeof(ofColor);
 		const auto jointsDataSize5 = data.joints5.size() * sizeof(ofVec3f);
+#endif
 
+#ifdef NEW_DATA_STRUCT
+		size_t bodySize = 0;
+		for (int i=0; i<6; i++) {
+			bodySize += verticesDataSize[i] + colorsDataSize[i] + jointsDataSize[i];
+		}
+#else
 		const size_t bodySize = verticesDataSize0 + colorsDataSize0 + jointsDataSize0 +
 			verticesDataSize1 + colorsDataSize1 + jointsDataSize1 +
 			verticesDataSize2 + colorsDataSize2 + jointsDataSize2 +
 			verticesDataSize3 + colorsDataSize3 + jointsDataSize3 +
 			verticesDataSize4 + colorsDataSize4 + jointsDataSize4 +
 			verticesDataSize5 + colorsDataSize5 + jointsDataSize5;
-
+#endif
 		this->headerAndBody.resize(headerSize + bodySize);
 
 		// header
 		{
 			auto & header = this->getHeader<Header::KinectData>(true);
+#ifdef NEW_DATA_STRUCT
+			for (int i=0; i<6; i++) {
+				header.verticesSize[i] = (uint32_t)data.users[i].vertices.size();
+				header.colorsSize[i] = (uint32_t)data.users[i].colors.size();
+				header.jointsSize[i] = (uint32_t)data.users[i].joints.size();
+			}
+#else
 			header.verticesSize0 = (uint32_t)data.vertices0.size();
 			header.colorsSize0 = (uint32_t)data.colors0.size();
 			header.jointsSize0 = (uint32_t)data.joints0.size();
@@ -218,7 +244,7 @@ namespace ofxSquashBuddies {
 			header.verticesSize5 = (uint32_t)data.vertices5.size();
 			header.colorsSize5 = (uint32_t)data.colors5.size();
 			header.jointsSize5 = (uint32_t)data.joints5.size();
-
+#endif
 
 		}
 
@@ -226,6 +252,16 @@ namespace ofxSquashBuddies {
 		{
 			auto body = (uint8_t *) this->getBodyData(); 
 
+#ifdef NEW_DATA_STRUCT
+			for (int i=0; i<6; i++) {
+				memcpy(body, data.users[i].vertices.data(), verticesDataSize[i]);
+				body += verticesDataSize[i];
+				memcpy(body, data.users[i].colors.data(), colorsDataSize[i]);
+				body += colorsDataSize[i];
+				memcpy(body, data.users[i].joints.data(), jointsDataSize[i]);
+				body += jointsDataSize[i];
+			}
+#else
 			memcpy(body, data.vertices0.data(), verticesDataSize0);
 			body += verticesDataSize0;
 
@@ -283,6 +319,7 @@ namespace ofxSquashBuddies {
 			body += colorsDataSize5;
 
 			memcpy(body, data.joints5.data(), jointsDataSize5);
+#endif
 		}
 	}
 
@@ -470,6 +507,26 @@ namespace ofxSquashBuddies {
 			const auto & header = this->getHeader<Header::KinectData>();
 			auto bodySize = this->getBodySize();
 
+#ifdef NEW_DATA_STRUCT
+			auto body = (uint8_t *) this->getBodyData();
+
+			for (int i=0; i<6; i++) {
+				data.users[i].vertices.resize(header.verticesSize[i]);
+				data.users[i].colors.resize(header.colorsSize[i]);
+				data.users[i].joints.resize(header.jointsSize[i]);
+
+				memcpy(data.users[i].vertices.data(), body, header.verticesSize[i] * sizeof(ofVec3f));
+				body += header.verticesSize[i] * sizeof(ofVec3f);
+				memcpy(data.users[i].colors.data(), body, header.colorsSize[i] * sizeof(ofColor));
+				body += header.colorsSize[i] * sizeof(ofColor);
+				memcpy(data.users[i].joints.data(), body, header.jointsSize[i] * sizeof(ofVec3f));
+				body += header.jointsSize[i] * sizeof(ofVec3f);
+			}
+
+
+
+#else
+
 			auto & vertices0 = data.vertices0;
 			auto & colors0 = data.colors0;
 			auto & joints0 = data.joints0;
@@ -609,6 +666,8 @@ namespace ofxSquashBuddies {
 
 
 			}
+#endif
+
 
 			return true;
 		}

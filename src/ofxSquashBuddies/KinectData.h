@@ -1,8 +1,18 @@
 #pragma once
 #include "ofMain.h" 
 
+#define NEW_DATA_STRUCT
+
 class ofxKinectData {
 public:
+
+#ifdef NEW_DATA_STRUCT
+	struct user {
+		vector<ofVec3f> vertices;
+		vector<ofColor> colors;
+		vector<ofVec3f> joints;
+	} users[6];
+#else
 	vector<ofVec3f> vertices0;
 	vector<ofColor> colors0;
 	vector<ofVec3f> joints0;
@@ -26,8 +36,12 @@ public:
 	vector<ofVec3f> vertices5;
 	vector<ofColor> colors5;
 	vector<ofVec3f> joints5;
+#endif
 
-	void addVert(int id, ofVec3f vert) {
+	void addVert(int id, const ofVec3f& vert) {
+#ifdef NEW_DATA_STRUCT
+		users[id].vertices.push_back(vert);
+#else
 		switch (id)
 		{
 		case 0:
@@ -52,9 +66,13 @@ public:
 		default:
 			break;
 		}
+#endif
 	}
 
-	void addColor(int id, ofColor col) {
+	void addColor(int id, const ofColor& col) {
+#ifdef NEW_DATA_STRUCT
+		users[id].colors.push_back(col);
+#else
 		switch (id)
 		{
 		case 0:
@@ -79,9 +97,13 @@ public:
 		default:
 			break;
 		}
+#endif
 	}
 
-	void addJoint(int id, ofVec3f joint) {
+	void addJoint(int id, const ofVec3f& joint) {
+#ifdef NEW_DATA_STRUCT
+		users[id].joints.push_back(joint);
+#else
 		switch (id)
 		{
 		case 0:
@@ -106,9 +128,17 @@ public:
 		default:
 			break;
 		}
+#endif
 	}
 
 	void clear() {
+#ifdef NEW_DATA_STRUCT
+		for (int i=0; i<6; i++) {
+			users[i].vertices.clear();
+			users[i].colors.clear();
+			users[i].joints.clear();
+		}
+#else
 		vertices0.clear();
 		colors0.clear();
 		joints0.clear();
@@ -132,8 +162,27 @@ public:
 		vertices5.clear();
 		colors5.clear();
 		joints5.clear();
+#endif
 	}
 
 
+#ifndef NEW_DATA_STRUCT
 	ofVec3f* getVertices0() { return vertices0.data(); }
+
+	vector<ofVec3f>& getVertices(int i) {
+		switch (i) {
+			case 0:
+			return vertices0;
+			case 1:
+			return vertices1;
+			case 2:
+			return vertices2;
+			case 3:
+			return vertices3;
+			case 4:
+			return vertices4;
+			case 5:
+		}
+	}
+#endif
 };
