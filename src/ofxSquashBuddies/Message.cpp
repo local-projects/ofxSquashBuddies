@@ -173,6 +173,10 @@ namespace ofxSquashBuddies {
 		for (int i=0; i<6; i++) {
 			bodySize += verticesDataSize[i] + colorsDataSize[i] + jointsDataSize[i];
 		}
+#ifdef KINECT_DATA_WITH_COLOR
+		// add color buffer
+		bodySize += data.color.pixels.size();
+#endif
 		this->headerAndBody.resize(headerSize + bodySize);
 
 		// header
@@ -183,12 +187,17 @@ namespace ofxSquashBuddies {
 				header.colorsSize[i] = (uint32_t)data.bodies[i].colors.size();
 				header.jointsSize[i] = (uint32_t)data.bodies[i].joints.size();
 			}
+#ifdef KINECT_DATA_WITH_COLOR
+			// color buffer
+			header.color.width = data.color.pixels.getWidth();
+			header.color.height = data.color.pixels.getHeight();
+			header.color.pixelFormat = data.color.pixels.getPixelFormat();
+#endif
 		}
 
+		auto body = (uint8_t *) this->getBodyData();
 		// body
 		{
-			auto body = (uint8_t *) this->getBodyData(); 
-
 			for (int i=0; i<6; i++) {
 				memcpy(body, data.bodies[i].vertices.data(), verticesDataSize[i]);
 				body += verticesDataSize[i];
@@ -198,8 +207,12 @@ namespace ofxSquashBuddies {
 				body += jointsDataSize[i];
 			}
 		}
-	}
 
+#ifdef KINECT_DATA_WITH_COLOR
+		// color
+		memcpy(body, data.color.pixels.getData(), data.color.pixels.size());
+#endif
+	}
 
 	//----------
 	void Message::clear() {
@@ -398,6 +411,14 @@ namespace ofxSquashBuddies {
 				memcpy(data.bodies[i].joints.data(), body, header.jointsSize[i] * sizeof(ofVec3f));
 				body += header.jointsSize[i] * sizeof(ofVec3f);
 			}
+
+#ifdef KINECT_DATA_WITH_COLOR
+			//reallocate if we need to
+			if (data.color.pixels.getWidth() != header.color.width || data.color.pixels.getHeight() != header.color.height || data.color.pixels.getPixelFormat() != (ofPixelFormat)header.color.pixelFormat) {
+				data.color.pixels.allocate(header.color.width, header.color.height, (ofPixelFormat)header.color.pixelFormat);
+			}
+			memcpy(data.color.pixels.getData(), body, data.color.pixels.size());
+#endif
 			return true;
 		}
 		else {
