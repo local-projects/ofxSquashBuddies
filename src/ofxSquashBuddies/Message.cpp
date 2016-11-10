@@ -192,9 +192,9 @@ namespace ofxSquashBuddies {
 			}
 
 			// color buffer
-			header.color.width = data.color.pixels.getWidth();
-			header.color.height = data.color.pixels.getHeight();
-			header.color.pixelFormat = data.color.pixels.getPixelFormat();
+			header.colorWidth = data.color.pixels.getWidth();
+			header.colorHeight = data.color.pixels.getHeight();
+			header.colorPixelFormat = data.color.pixels.getPixelFormat();
 		}
 
 		auto body = (uint8_t *) this->getBodyData();
@@ -418,9 +418,9 @@ namespace ofxSquashBuddies {
 			}
 
 			//reallocate if we need to
-			if (header.color.width > 0 && header.color.height > 0) {
-				if (data.color.pixels.getWidth() != header.color.width || data.color.pixels.getHeight() != header.color.height || data.color.pixels.getPixelFormat() != (ofPixelFormat)header.color.pixelFormat) {
-					data.color.pixels.allocate(header.color.width, header.color.height, (ofPixelFormat)header.color.pixelFormat);
+			if (header.colorWidth > 0 && header.colorHeight > 0) {
+				if (data.color.pixels.getWidth() != header.colorWidth || data.color.pixels.getHeight() != header.colorHeight || data.color.pixels.getPixelFormat() != (ofPixelFormat)header.colorPixelFormat) {
+					data.color.pixels.allocate(header.colorWidth, header.colorHeight, (ofPixelFormat)header.colorPixelFormat);
 				}
 				memcpy(data.color.pixels.getData(), body, data.color.pixels.size());
 			}

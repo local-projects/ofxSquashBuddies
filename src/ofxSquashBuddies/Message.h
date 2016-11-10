@@ -208,11 +208,10 @@ namespace ofxSquashBuddies {
 				uint32_t colorsSize[6];
 				uint32_t jointsSize[6];
 				uint32_t uvSize[6];
-				struct color_t {
-					uint16_t width;
-					uint16_t height;
-					uint16_t pixelFormat;
-				} color;
+
+				uint32_t colorWidth;
+				uint32_t colorHeight;
+				uint32_t colorPixelFormat;
 			};
 		};
 	}
