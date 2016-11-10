@@ -422,7 +422,7 @@ namespace ofxSquashBuddies {
 			return true;
 		}
 		else {
-			OFXSQUASHBUDDIES_WARNING << "Message Header doesn't match Mesh type";
+			OFXSQUASHBUDDIES_WARNING << "Message Header doesn't match ofxKinectData type";
 			return false;
 		}
 
