@@ -1,8 +1,6 @@
 #pragma once
 #include "ofMain.h" 
 
-#define KINECT_DATA_WITH_COLOR
-
 class ofxKinectData {
 public:
 
@@ -10,12 +8,12 @@ public:
 		vector<ofVec3f> vertices;
 		vector<ofColor> colors;
 		vector<ofVec3f> joints;
+		vector<ofVec2f> uvs;
 	} bodies[6];
-#ifdef KINECT_DATA_WITH_COLOR
+
 	struct Color {
 		ofPixels pixels;
 	} color;
-#endif
 
 	void addVert(int id, const ofVec3f& vert) {
 		bodies[id].vertices.push_back(vert);
@@ -23,6 +21,10 @@ public:
 
 	void addColor(int id, const ofColor& col) {
 		bodies[id].colors.push_back(col);
+	}
+
+	void addUv(int id, const ofVec2f& uv) {
+		bodies[id].uvs.push_back(uv);
 	}
 
 	void addJoint(int id, const ofVec3f& joint) {
@@ -34,6 +36,8 @@ public:
 			bodies[i].vertices.clear();
 			bodies[i].colors.clear();
 			bodies[i].joints.clear();
+			bodies[i].uvs.clear();
 		}
+		color.pixels.clear();
 	}
 };

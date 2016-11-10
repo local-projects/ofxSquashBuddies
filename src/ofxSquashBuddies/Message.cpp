@@ -162,21 +162,23 @@ namespace ofxSquashBuddies {
 		size_t verticesDataSize[6];
 		size_t colorsDataSize[6];
 		size_t jointsDataSize[6];
+		size_t uvsDataSize[6];
 
 		for (int i=0; i<6; i++) {
 			verticesDataSize[i] = data.bodies[i].vertices.size() * sizeof(ofVec3f);
 			colorsDataSize[i] = data.bodies[i].colors.size() * sizeof(ofColor);
 			jointsDataSize[i] = data.bodies[i].joints.size() * sizeof(ofVec3f);
+			uvsDataSize[i] = data.bodies[i].uvs.size() * sizeof(ofVec2f);
 		}
 
 		size_t bodySize = 0;
 		for (int i=0; i<6; i++) {
-			bodySize += verticesDataSize[i] + colorsDataSize[i] + jointsDataSize[i];
+			bodySize += verticesDataSize[i] + jointsDataSize[i] + colorsDataSize[i] + uvsDataSize[i];
 		}
-#ifdef KINECT_DATA_WITH_COLOR
+
 		// add color buffer
 		bodySize += data.color.pixels.size();
-#endif
+
 		this->headerAndBody.resize(headerSize + bodySize);
 
 		// header
@@ -186,13 +188,13 @@ namespace ofxSquashBuddies {
 				header.verticesSize[i] = (uint32_t)data.bodies[i].vertices.size();
 				header.colorsSize[i] = (uint32_t)data.bodies[i].colors.size();
 				header.jointsSize[i] = (uint32_t)data.bodies[i].joints.size();
+				header.uvSize[i] = (uint32_t)data.bodies[i].uvs.size();
 			}
-#ifdef KINECT_DATA_WITH_COLOR
+
 			// color buffer
 			header.color.width = data.color.pixels.getWidth();
 			header.color.height = data.color.pixels.getHeight();
 			header.color.pixelFormat = data.color.pixels.getPixelFormat();
-#endif
 		}
 
 		auto body = (uint8_t *) this->getBodyData();
@@ -205,13 +207,13 @@ namespace ofxSquashBuddies {
 				body += colorsDataSize[i];
 				memcpy(body, data.bodies[i].joints.data(), jointsDataSize[i]);
 				body += jointsDataSize[i];
+				memcpy(body, data.bodies[i].uvs.data(), uvsDataSize[i]);
+				body += uvsDataSize[i];
 			}
 		}
 
-#ifdef KINECT_DATA_WITH_COLOR
 		// color
 		memcpy(body, data.color.pixels.getData(), data.color.pixels.size());
-#endif
 	}
 
 	//----------
@@ -403,6 +405,7 @@ namespace ofxSquashBuddies {
 				data.bodies[i].vertices.resize(header.verticesSize[i]);
 				data.bodies[i].colors.resize(header.colorsSize[i]);
 				data.bodies[i].joints.resize(header.jointsSize[i]);
+				data.bodies[i].uvs.resize(header.uvSize[i]);
 
 				memcpy(data.bodies[i].vertices.data(), body, header.verticesSize[i] * sizeof(ofVec3f));
 				body += header.verticesSize[i] * sizeof(ofVec3f);
@@ -410,15 +413,17 @@ namespace ofxSquashBuddies {
 				body += header.colorsSize[i] * sizeof(ofColor);
 				memcpy(data.bodies[i].joints.data(), body, header.jointsSize[i] * sizeof(ofVec3f));
 				body += header.jointsSize[i] * sizeof(ofVec3f);
+				memcpy(data.bodies[i].uvs.data(), body, header.uvSize[i] * sizeof(ofVec2f));
+				body += header.uvSize[i] * sizeof(ofVec2f);
 			}
 
-#ifdef KINECT_DATA_WITH_COLOR
 			//reallocate if we need to
-			if (data.color.pixels.getWidth() != header.color.width || data.color.pixels.getHeight() != header.color.height || data.color.pixels.getPixelFormat() != (ofPixelFormat)header.color.pixelFormat) {
-				data.color.pixels.allocate(header.color.width, header.color.height, (ofPixelFormat)header.color.pixelFormat);
+			if (header.color.width > 0 && header.color.height > 0) {
+				if (data.color.pixels.getWidth() != header.color.width || data.color.pixels.getHeight() != header.color.height || data.color.pixels.getPixelFormat() != (ofPixelFormat)header.color.pixelFormat) {
+					data.color.pixels.allocate(header.color.width, header.color.height, (ofPixelFormat)header.color.pixelFormat);
+				}
+				memcpy(data.color.pixels.getData(), body, data.color.pixels.size());
 			}
-			memcpy(data.color.pixels.getData(), body, data.color.pixels.size());
-#endif
 			return true;
 		}
 		else {
