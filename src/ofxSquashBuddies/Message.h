@@ -201,7 +201,7 @@ namespace ofxSquashBuddies {
 
 		struct KinectData {
 			struct {
-				uint16_t headerSize = 108;
+				uint16_t headerSize = 116;
 				MessageType messageType = MessageType::KinectData;
 
 				uint32_t verticesSize[6];
