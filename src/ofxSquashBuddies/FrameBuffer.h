@@ -50,6 +50,7 @@ namespace ofxSquashBuddies {
 
 		ofxSquash::Codec codec = ThingsInCommon::getDefaultCodec();
 
+		bool success = false;
 		int32_t packetIndexPosition = 0;
 		ofThreadChannel<Packet> packetsToDecompressor;
 
@@ -81,9 +82,11 @@ namespace ofxSquashBuddies {
 		FrameBuffer & getFrameBuffer(uint32_t frameIndex);
 		bool isExpired(uint32_t frameIndex) const;
 
-		ofThreadChannel<shared_ptr<ofxAsio::UDP::DataGram>> socketToFrameBuffers;
+		ofThreadChannel<shared_ptr<ofxAsio::DataGram>> socketToFrameBuffers;
 		ThreadChannel<Message> decompressorToFrameReceiver;
 		ofThreadChannel<DroppedFrame> droppedFrames;
+
+		const vector<shared_ptr<FrameBuffer>> & getFrameBuffers() const;
 	protected:
 		void callbackDroppedFrame(DroppedFrame &);
 		vector<shared_ptr<FrameBuffer>> frameBuffers;

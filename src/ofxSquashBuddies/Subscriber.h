@@ -7,18 +7,17 @@
 #include "ofThreadChannel.h"
 #include "ofEvent.h"
 
-#define OFXSQUASHBUDDIES_RECEIVETHREADCOUNT 3
 namespace ofxSquashBuddies {
-	class Receiver : public ThingsInCommon {
+	class Subscriber : public ThingsInCommon {
 	public:
-		Receiver();
-		~Receiver();
-
-		bool init(int port);
+		Subscriber();
+		~Subscriber();
+			
+		bool init(string address, int port);
 		void close();
 
+		const string & getAddress() const;
 		int getPort() const;
-		ofxAsio::UDP::Server & getSocketServer();
 
 		void setCodec(const ofxSquash::Codec &) override;
 		const ofxSquash::Codec & getCodec() const override;
@@ -36,6 +35,8 @@ namespace ofxSquashBuddies {
 		bool receive(ofxKinectData &);
 
 		vector<DroppedFrame> getDroppedFrames() const;
+		static void printDebug(const DroppedFrame &);
+
 		float getIncomingFramerate() const;
 
 		ofEvent<Message> onMessageReceive;
@@ -43,14 +44,18 @@ namespace ofxSquashBuddies {
 	protected:
 		void asyncCallback(shared_ptr<ofxAsio::UDP::DataGram>);
 
+		string address;
+		int port;
+
 		atomic_bool threadsRunning;
 
 		ofxSquash::Codec codec;
 
-		thread socketThread[OFXSQUASHBUDDIES_RECEIVETHREADCOUNT];
+		thread socketThread;
 		void socketLoop();
-		int port = 0;
-		shared_ptr<ofxAsio::UDP::Server> socket;
+
+		zmq::context_t context;
+		shared_ptr<zmq::socket_t> socket;
 
 		FrameBufferSet frameBuffers;
 

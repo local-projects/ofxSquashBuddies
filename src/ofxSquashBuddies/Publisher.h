@@ -10,12 +10,14 @@
 #include "ofMesh.h"
 
 namespace ofxSquashBuddies {
-	class Sender : public ThingsInCommon {
+	class Publisher : public ThingsInCommon {
 	public:
-		Sender();
-		~Sender();
-		void init(string ipAddress, int port);
+		Publisher();
+		~Publisher();
+		void init(int port);
 		void close();
+
+		int getPort() const;
 		
 		void setCodec(const ofxSquash::Codec &) override;
 		const ofxSquash::Codec & getCodec() const override;
@@ -40,30 +42,32 @@ namespace ofxSquashBuddies {
 		size_t getMaxSocketBufferSize() const;
 		size_t getCurrentSocketBufferSize() const;
 
+		void setMaxCompressorQueueSize(size_t maxCompressorQueueSize);
+		size_t getMaxCompressorQueueSize() const;
+		size_t getCurrentCompressorQueueSize() const;
+
 		size_t getPacketSize() const;
 		void setPacketSize(size_t);
 
-		ofxAsio::UDP::EndPoint getEndPoint();
 	protected:
 		void compressLoop();
 		void socketLoop();
 
+		int port;
+
 		ofxSquash::Codec codec;
+
+		zmq::context_t context;
+		unique_ptr<zmq::socket_t> socket;
 
 		bool threadsRunning = false;
 		std::thread compressThread;
 		std::thread socketThread;
 
-		shared_ptr<ofxAsio::UDP::Client> socket;
-
-		shared_ptr<ofThreadChannel<Message>> appToCompressor;
+		shared_ptr<ThreadChannel<Message>> appToCompressor;
 		shared_ptr<ThreadChannel<Packet>> compressorToSocket;
 
-		struct Config {
-			ofxAsio::UDP::EndPoint endPoint;
-		} config;
-		mutex configMutex;
-
+		size_t maxCompressorQueueSize = 1;
 		size_t maxSocketBufferSize = 300;
 		size_t packetSize = Packet::DefaultPacketSize;
 
