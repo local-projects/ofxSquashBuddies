@@ -181,7 +181,7 @@ namespace ofxSquashBuddies {
 			for (int i=0; i<6; i++) {
 				header.verticesSize[i] = (uint32_t)data.bodies[i].vertices.size();
 				header.colorsSize[i] = (uint32_t)data.bodies[i].colors.size();
-				header.jointsSize[i] = (uint32_t)data.bodies[i].joints.size();
+				header.jointsSize[i] = (uint16_t)data.bodies[i].joints.size();
 			}
 		}
 
